@@ -184,4 +184,12 @@ public class TerminalOutput extends JScrollPane{
 		return handler;
 	}
 
+	public Style getDefaultStyle() {
+		return defaultStyle;
+	}
+
+	public Style getErrStyle() {
+		return errStyle;
+	}
+
 }
