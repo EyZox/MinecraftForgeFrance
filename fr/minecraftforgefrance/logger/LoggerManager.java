@@ -49,12 +49,19 @@ public class LoggerManager {
 			LoggerManager.logger = logger;
 			try {
 				LoggerManager.logger.addHandler(new handler(Paths.get(filename)));
-				return null;
 			} catch (IOException e) {
 				System.err.println("[WARNING] Unable to create log "+filename+" : "+e.getMessage());
-				ReadOnlyTerminal terminal = new ReadOnlyTerminal(filename,new Dimension(300,300), new TerminalOutput(logger));
-				return terminal;
 			}
+			ReadOnlyTerminal terminal = new ReadOnlyTerminal(filename,new Dimension(300,300), new TerminalOutput(logger));
+			return terminal;
+		}
+	}
+	
+	public static ReadOnlyTerminal init(Logger logger) {
+		synchronized (logger) {
+			LoggerManager.logger = logger;
+			ReadOnlyTerminal terminal = new ReadOnlyTerminal("",new Dimension(300,300), new TerminalOutput(logger));
+			return terminal;
 		}
 	}
 	
