@@ -45,18 +45,22 @@ public class LoggerManager {
 	private static Logger logger;
 	
 	public static ReadOnlyTerminal init(Logger logger, String filename) {
-		LoggerManager.logger = logger;
-		try {
-			LoggerManager.logger.addHandler(new handler(Paths.get(filename)));
-			return null;
-		} catch (IOException e) {
-			System.err.println("[WARNING] Unable to create log "+filename+" : "+e.getMessage());
-			ReadOnlyTerminal terminal = new ReadOnlyTerminal(filename,new Dimension(300,300), new TerminalOutput(logger));
-			return terminal;
+		synchronized (logger) {
+			LoggerManager.logger = logger;
+			try {
+				LoggerManager.logger.addHandler(new handler(Paths.get(filename)));
+				return null;
+			} catch (IOException e) {
+				System.err.println("[WARNING] Unable to create log "+filename+" : "+e.getMessage());
+				ReadOnlyTerminal terminal = new ReadOnlyTerminal(filename,new Dimension(300,300), new TerminalOutput(logger));
+				return terminal;
+			}
 		}
 	}
 	
 	public Logger getLogger() {
-		return logger;
+		synchronized (logger) {
+			return logger;
+		}
 	}
 }
